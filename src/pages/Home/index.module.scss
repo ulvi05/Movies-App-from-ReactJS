@@ -1,0 +1,95 @@
+.home-section {
+  background-image: url("../../assets/images/sinema-img.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  // height: 250px;
+  border-bottom: 5px solid #564d4d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.home-header {
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 2.5rem;
+  line-height: 1.4;
+}
+
+.home-header h1 {
+  margin: 0;
+}
+
+.home-header p {
+  margin: 10px 0 0;
+}
+
+.slider-section {
+  margin-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-header {
+    font-size: 1.5rem;
+  }
+
+  .slider-section h1 {
+    font-size: 1.5rem;
+  }
+
+  .slider-section .mui-grid-container {
+    padding: 0 10px;
+  }
+}
+.slider-section {
+  padding: 40px 0;
+}
+
+.slider-container {
+  width: 80%;
+  margin: auto;
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #fff;
+  }
+  .swiper-pagination-bullet {
+    background: #fff;
+  }
+}
+
+.slider-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+    border-radius: 8px;
+  }
+  h3 {
+    font-size: 24px;
+    margin: 10px 0;
+    color: white;
+  }
+  p {
+    font-size: 16px;
+    text-align: center;
+    max-width: 600px;
+    color: white;
+  }
+}
