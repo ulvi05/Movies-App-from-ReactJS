@@ -15,6 +15,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [movies, setMovies] = useState([]);
@@ -38,6 +39,7 @@ function Home() {
       <section className={styles["slider-section"]}>
         <Container>
           <h1>Featured Movies</h1>
+          
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={30}
@@ -47,10 +49,11 @@ function Home() {
             className={styles["swiper-container"]}
           >
             {movies.map((movie) => (
+              <Grid key={movie.id} item xs={12} sm={12} md={6} lg={3} xl={3}>
               <SwiperSlide key={movie.id}>
-                <Card sx={{ maxWidth: 345 }}>
+                <Card sx={{ maxWidth: 500 , backgroundColor: "#F5F5F1" }}>
                   <CardMedia
-                    sx={{ height: 140 }}
+                    sx={{ height: 350, width: 350, backgroundPosition:"top", backgroundPositionX: "top", objectFit: "contain"}}
                     image={movie.coverImg}
                     title={movie.title}
                   />
@@ -69,10 +72,19 @@ function Home() {
                     </Typography>
                   </CardContent>
                   <CardActions>
-                    <Button size="small">Detail</Button>
+                    
+                    <Button variant="contained" color="error" size="small">
+                    <Link
+                        style={{ color: "white", textDecoration: "none" }}
+                        to={`/movies`}
+                      >
+                        All Movies
+                      </Link>
+                    </Button>
                   </CardActions>
                 </Card>
               </SwiperSlide>
+              </Grid>
             ))}
           </Swiper>
         </Container>

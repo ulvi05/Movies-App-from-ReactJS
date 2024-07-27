@@ -32,6 +32,10 @@ export const ROUTERS = [
         element: <EditMovies />,
       },
       {
+        path: "edit-movies/:id",
+        element: <EditMovies />,
+      },
+      {
         path: "*",
         element: <NotFound />,
       },
