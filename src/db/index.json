@@ -128,5 +128,47 @@
       "year": 2023,
       "coverImg": "https://m.media-amazon.com/images/M/MV5BMTJkYmQxYmQtNmU2Mi00OTdlLTgyZDEtNmNiYzA2OWU0MTU4XkEyXkFqcGdeQXVyMzEwMTQ2Mg@@._V1_.jpg"
     }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "username": "ulvi21",
+      "email": "ulviaghazade@gmail.com",
+      "role": "admin",
+      "password": "Admin1212",
+      "basket": []
+    },
+    {
+      "id": "2",
+      "username": "johndoe",
+      "email": "johndoe@example.com",
+      "role": "client",
+      "password": "Client123",
+      "basket": []
+    },
+    {
+      "id": "3",
+      "username": "alexsmith",
+      "email": "alexsmith@example.com",
+      "role": "client",
+      "password": "Client9876",
+      "basket": []
+    },
+    {
+      "id": "4",
+      "username": "emilyjohnson",
+      "email": "emilyjohnson@example.com",
+      "role": "client",
+      "password": "Client2468",
+      "basket": []
+    },
+    {
+      "id": "1d9d",
+      "email": "eldar@gmail.com",
+      "username": "Eldar21",
+      "password": "Eldar333",
+      "role": "client",
+      "basket": []
+    }
   ]
 }

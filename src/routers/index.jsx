@@ -5,6 +5,10 @@ import MoviesDetail from "../pages/MoviesDetail";
 import EditMovies from "../pages/EditMovies";
 import NotFound from "../pages/NotFound";
 import MainLayout from "../components/MainLayout";
+import Wishlist from "../pages/Wishlist";
+import Login from "../pages/Login";
+import Register from "../pages/Register";
+import PrivateRoute from "../components/PrivateRoute";
 
 export const ROUTERS = [
   {
@@ -13,27 +17,67 @@ export const ROUTERS = [
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <PrivateRoute>
+            <Home />
+          </PrivateRoute>
+        ),
       },
       {
         path: "movies",
-        element: <Movies />,
+        element: (
+          <PrivateRoute>
+            <Movies />
+          </PrivateRoute>
+        ),
       },
       {
         path: "add-movies",
-        element: <AddMovies />,
+        element: (
+          <PrivateRoute>
+            <AddMovies />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "wishlist",
+        element: (
+          <PrivateRoute>
+            <Wishlist />
+          </PrivateRoute>
+        ),
       },
       {
         path: "movies/:id",
-        element: <MoviesDetail />,
+        element: (
+          <PrivateRoute>
+            <MoviesDetail />
+          </PrivateRoute>
+        ),
       },
       {
         path: "edit-movies",
-        element: <EditMovies />,
+        element: (
+          <PrivateRoute>
+            <EditMovies />
+          </PrivateRoute>
+        ),
       },
       {
         path: "edit-movies/:id",
-        element: <EditMovies />,
+        element: (
+          <PrivateRoute>
+            <EditMovies />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
       },
       {
         path: "*",

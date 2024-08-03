@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
+import { BASE_URL } from "../../config/constants";
 
 export async function getAll(endpoint) {
   let response = { data: null, error: null, loading: true };
@@ -78,6 +78,6 @@ export async function postAPI(endpoint, payload) {
     return res.data;
   } catch (err) {
     console.error("Error posting data:", err);
-    throw err; 
+    throw err;
   }
 }

@@ -3,10 +3,10 @@
   height: 80px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #221f1f;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10000;
+  // position: fixed;
+  // top: 0;
+  // left: 0;
+  // z-index: 10000;
   nav {
     display: flex;
     justify-content: space-between;
@@ -30,6 +30,13 @@
           text-decoration: none;
           color: #fff;
           font-weight: 600;
+          sup {
+            border: 1px solid red;
+            border-radius: 50%;
+            padding: 2px 5px 3px 5px;
+            background-color: red;
+            margin-left: 2px;
+          }
         }
       }
     }
