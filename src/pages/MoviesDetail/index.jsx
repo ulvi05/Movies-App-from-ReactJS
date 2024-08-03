@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteAPI, getID } from "../../services/api/api";
-import { endpoints } from "../../config/constants";
+import { BASE_URL, endpoints } from "../../config/constants";
 import { Button, Grid } from "@mui/material";
 import Container from "../../components/Container";
 import Card from "@mui/material/Card";
@@ -37,7 +37,7 @@ const MoviesDetail = () => {
     };
 
     fetchMovie();
-    fetch("/path/to/users.json")
+    fetch(`${BASE_URL}/users`)
       .then((response) => response.json())
       .then((data) => {
         const currentUser = data.find((user) => user.username === "ulvi21");

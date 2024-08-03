@@ -1,42 +1,51 @@
-import { useFormik } from "formik";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getID, putAPI } from "../../services/api/api";
-import { endpoints } from "../../config/constants";
-import Container from "../../components/Container";
-import { MovieValidationSchema } from "../../validation/addmovie";
-import Swal from "sweetalert2";
-import styles from "./index.module.scss";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Button,
-  FormControl,
+  TextField,
   InputLabel,
   MenuItem,
+  FormControl,
   Select,
-  TextField,
-  CircularProgress,
 } from "@mui/material";
+import styles from "./index.module.scss";
+import Container from "../../components/Container";
+import { useFormik } from "formik";
+import { getID, patchAPI } from "../../services/api/api";
+import { endpoints } from "../../config/constants";
+import Swal from "sweetalert2";
+import { MovieValidationSchema } from "../../validation/addmovie";
+import { useEffect, useState } from "react";
+import { HelmetProvider, Helmet } from "react-helmet-async";
 
-function EditMovies() {
+const EditMovies = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [movie, setMovie] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [updatingMovie, setUpdatingMovie] = useState(null); // Initially null for loading state
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const res = await getID(endpoints.movies, id);
+        setUpdatingMovie(res.data);
+      } catch (error) {
+        console.error("Failed to fetch movie data:", error);
+      }
+    };
+    fetchMovie();
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
-      title: "",
-      year: "",
-      artist: "",
-      genre: "",
-      coverImg: "",
+      title: updatingMovie?.title || "",
+      artist: updatingMovie?.artist || "",
+      year: updatingMovie?.year || "",
+      coverImg: updatingMovie?.coverImg || "",
+      genre: updatingMovie?.genre || "",
     },
     validationSchema: MovieValidationSchema,
     onSubmit: async (values, actions) => {
       try {
-        await putAPI(`${endpoints.movies}/${id}`, values);
+        await patchAPI(endpoints.movies, id, values);
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -45,107 +54,89 @@ function EditMovies() {
           timer: 1500,
         });
         navigate("/movies");
-        actions.resetForm();
       } catch (error) {
-        console.error("Error updating movie:", error);
-        setError("An error occurred while updating the movie.");
+        console.error("Failed to update movie:", error);
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Failed to Update Movie",
+          showConfirmButton: true,
+        });
+      } finally {
+        actions.resetForm();
       }
     },
+    enableReinitialize: true,
   });
 
-  useEffect(() => {
-    const fetchMovie = async () => {
-      try {
-        const res = await getID(endpoints.movies, id);
-        if (res.data) {
-          setMovie(res.data);
-          formik.setValues(res.data);
-        } else {
-          console.error("No movie found");
-        }
-      } catch (error) {
-        console.error("Error fetching movie:", error);
-        setError("An error occurred while fetching the movie.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMovie();
-  }, [id]);
-
-  if (loading) return <CircularProgress color="error" size={80} />;
+  if (!updatingMovie) return <div>Loading...</div>;
 
   return (
     <>
       <HelmetProvider>
         <Helmet>
           <meta charSet="utf-8" />
-          <title>Edit Movie</title>
-          <link rel="canonical" href="http://mysite.com/example" />
+          <title>Edit Movies</title>
+          <link rel="canonical" href={`http://mysite.com/movies/${id}`} />
         </Helmet>
         <Container>
           <form
             onSubmit={formik.handleSubmit}
-            className={styles["add-movie-form"]}
+            className={styles["edit-movie-form"]}
           >
-            <h2 style={{ textAlign: "center", color: "black" }}>Edit Movie</h2>
-            {error && (
-              <p style={{ color: "red", textAlign: "center" }}>{error}</p>
-            )}
+            <h3 style={{ textAlign: "center" }}>Edit Movie</h3>
             <TextField
               value={formik.values.title}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="title"
-              label="Title"
+              id="outlined-basic-title"
               required
               type="text"
               variant="outlined"
-              color="primary"
             />
             {formik.errors.title && formik.touched.title && (
-              <span style={{ color: "red" }}>{formik.errors.title}</span>
+              <span className={styles.error}>{formik.errors.title}</span>
             )}
             <TextField
               value={formik.values.artist}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="artist"
-              label="Artist"
+              id="outlined-basic-artist"
               required
               type="text"
               variant="outlined"
             />
             {formik.errors.artist && formik.touched.artist && (
-              <span style={{ color: "red" }}>{formik.errors.artist}</span>
+              <span className={styles.error}>{formik.errors.artist}</span>
             )}
             <TextField
               value={formik.values.year}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="year"
-              label="Year"
+              id="outlined-basic-year"
               required
               type="number"
-              min={1980}
+              min={1900}
               variant="outlined"
             />
             {formik.errors.year && formik.touched.year && (
-              <span style={{ color: "red" }}>{formik.errors.year}</span>
+              <span className={styles.error}>{formik.errors.year}</span>
             )}
             <TextField
               value={formik.values.coverImg}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               name="coverImg"
-              label="Cover Image URL"
+              id="outlined-basic-img"
               required
               type="url"
               variant="outlined"
             />
             {formik.errors.coverImg && formik.touched.coverImg && (
-              <span style={{ color: "red" }}>{formik.errors.coverImg}</span>
+              <span className={styles.error}>{formik.errors.coverImg}</span>
             )}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Genre</InputLabel>
@@ -155,7 +146,7 @@ function EditMovies() {
                 onBlur={formik.handleBlur}
                 name="genre"
                 labelId="demo-simple-select-label"
-                label="Genre"
+                id="demo-simple-select-option"
               >
                 <MenuItem value={"Action"}>Action</MenuItem>
                 <MenuItem value={"Adventure"}>Adventure</MenuItem>
@@ -170,16 +161,16 @@ function EditMovies() {
               </Select>
             </FormControl>
             {formik.errors.genre && formik.touched.genre && (
-              <span style={{ color: "red" }}>{formik.errors.genre}</span>
+              <span className={styles.error}>{formik.errors.genre}</span>
             )}
             <Button variant="contained" color="success" type="submit">
-              Save Changes
+              Update
             </Button>
           </form>
         </Container>
       </HelmetProvider>
     </>
   );
-}
+};
 
 export default EditMovies;
