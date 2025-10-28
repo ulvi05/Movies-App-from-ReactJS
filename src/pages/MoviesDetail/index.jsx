@@ -99,42 +99,48 @@ const MoviesDetail = () => {
         <link rel="canonical" href="http://mysite.com/example" />
       </Helmet>
       <Container>
-        <Grid item xs={12} sm={12} md={6} lg={3} xl={3}>
-          <Card>
-            <CardMedia
-              sx={{ height: 450, marginTop: "20px" }}
-              image={movie.coverImg}
-              title={movie.title}
-            />
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                {movie.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Genre: {movie.genre}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Year: {movie.year}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                Artist: {movie.artist}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button onClick={() => navigate("/movies")}>Go Back</Button>
-              <Button onClick={() => navigate(`/edit-movies/${movie.id}`)}>
-                Edit Movie
-              </Button>
-              <Button
-                onClick={handleDelete}
-                color="error"
-                variant="contained"
-                size="small"
-              >
-                Delete
-              </Button>
-            </CardActions>
-          </Card>
+        <Grid container justifyContent="center" sx={{ mt: 10 }}>
+          <Grid item xs={12} sm={10} md={8} lg={6}>
+            <Card sx={{ borderRadius: "12px", overflow: "hidden" }}>
+              <CardMedia
+                sx={{ height: 450, objectFit: "cover" }}
+                image={movie.coverImg}
+                title={movie.title}
+              />
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="h4" fontWeight={600}>
+                  {movie.title}
+                </Typography>
+                <Typography variant="body1" sx={{ mt: 1 }}>
+                  <strong>Genre:</strong> {movie.genre}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Year:</strong> {movie.year}
+                </Typography>
+                <Typography variant="body1">
+                  <strong>Artist:</strong> {movie.artist}
+                </Typography>
+              </CardContent>
+              <CardActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+                <Button variant="outlined" onClick={() => navigate("/movies")}>
+                  Go Back
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={() => navigate(`/edit-movies/${movie.id}`)}
+                >
+                  Edit Movie
+                </Button>
+                <Button
+                  color="error"
+                  variant="contained"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
         </Grid>
       </Container>
     </>

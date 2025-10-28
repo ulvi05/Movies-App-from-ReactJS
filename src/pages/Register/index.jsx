@@ -1,13 +1,11 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Box, Typography, Paper } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAll, postAPI } from "../../services/api/api";
 import { endpoints } from "../../config/constants";
 import Swal from "sweetalert2";
-import { useAuth } from "../../services/context/authContext";
 import { registerValidation } from "../../validation/user.register.validation";
-import zIndex from "@mui/material/styles/zIndex";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,7 +13,7 @@ const Register = () => {
 
   useEffect(() => {
     getAll(endpoints.users).then((res) => {
-      setUsers([...res.data]);
+      setUsers(res.data);
     });
   }, []);
 
@@ -26,143 +24,155 @@ const Register = () => {
       password: "",
       cpassword: "",
     },
-    onSubmit(values, actions) {
-      actions.resetForm();
-      const duplicateEmail = users.find((x) => x.email == values.email);
-      const duplicateUsername = users.find(
-        (x) => x.username == values.username
-      );
-      if (duplicateEmail) {
-        Swal.fire({
-          position: "top-end",
-          sx: { margin: "20px", zIndex: 999 },
-          icon: "error",
-          title: `Email has already taken`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-      if (duplicateUsername) {
-        Swal.fire({
-          position: "top-end",
-          sx: { margin: "20px", zIndex: 999 },
-          icon: "error",
-          title: `Username has already taken`,
-          showConfirmButton: false,
-          timer: 1500,
-        });
-      }
-      if (!duplicateEmail && !duplicateUsername) {
-        postAPI(endpoints.users, {
-          email: values.email,
-          username: values.username,
-          password: values.password,
-          role: "client",
-          basket: [],
-        });
-        Swal.fire({
-          position: "top-end",
-          sx: { margin: "20px", zIndex: 999 },
-          icon: "success",
-          title: `Welcome ${values.username}!`,
-          showConfirmButton: false,
-          timer: 1500,
-        }).then(() => {
-          navigate("/login");
-        });
-      }
-    },
     validationSchema: registerValidation,
+
+    onSubmit(values, actions) {
+      const duplicateEmail = users.some((x) => x.email === values.email);
+      const duplicateUsername = users.some(
+        (x) => x.username === values.username
+      );
+
+      if (duplicateEmail) {
+        return Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Email is already taken!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+
+      if (duplicateUsername) {
+        return Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "Username is already taken!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+
+      postAPI(endpoints.users, {
+        email: values.email,
+        username: values.username,
+        password: values.password,
+        role: "client",
+        basket: [],
+      });
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `Welcome ${values.username}!`,
+        showConfirmButton: false,
+        timer: 1500,
+      }).then(() => navigate("/login"));
+
+      actions.resetForm();
+    },
   });
+
   return (
-    <>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          formik.handleSubmit();
-        }}
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-          border: "1px solid black",
-          width: "50%",
-          margin: "100px auto ",
-          padding: "18px 24px",
-          borderRadius: "7px",
+    <Box
+      sx={{
+        minHeight: "70vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        pt: 8,
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          width: { xs: "90%", sm: "450px", md: "520px" },
+          p: 5,
+          borderRadius: "10px",
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Sign Up</h2>
-        <TextField
-          id="outlined-basic-email"
-          label="Email"
-          type="email"
-          required
-          variant="outlined"
-          style={{ borderRadius: "7px" }}
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          name="email"
-        />
-        {formik.errors.email && formik.touched.email && (
-          <span style={{ color: "red" }}>{formik.errors.email}</span>
-        )}
-        <TextField
-          id="outlined-basic-username"
-          label="Username"
-          type="text"
-          required
-          variant="outlined"
-          style={{ borderRadius: "7px" }}
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          name="username"
-        />
-        {formik.errors.username && formik.touched.username && (
-          <span style={{ color: "red" }}>{formik.errors.username}</span>
-        )}
-        <TextField
-          id="outlined-basic-password"
-          label="Password"
-          type="password"
-          required
-          variant="outlined"
-          style={{ borderRadius: "7px" }}
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          name="password"
-        />
-        {formik.errors.password && formik.touched.password && (
-          <span style={{ color: "red" }}>{formik.errors.password}</span>
-        )}
-        <TextField
-          id="outlined-basic-cpassword"
-          label="Confirm Password"
-          type="password"
-          required
-          variant="outlined"
-          style={{ borderRadius: "7px" }}
-          value={formik.values.cpassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          name="cpassword"
-        />
-        {formik.errors.cpassword && formik.touched.cpassword && (
-          <span style={{ color: "red" }}>{formik.errors.cpassword}</span>
-        )}
-        <Button
-          variant="contained"
-          type="submit"
-          style={{ borderRadius: "7px" }}
-        >
+        <Typography variant="h4" textAlign="center" fontWeight={600} mb={3}>
           Sign Up
-        </Button>
-        <Link to={"/login"}>Do you have an account?</Link>
-      </form>
-    </>
+        </Typography>
+
+        <form onSubmit={formik.handleSubmit}>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            required
+            margin="normal"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            name="email"
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+
+          <TextField
+            label="Username"
+            type="text"
+            fullWidth
+            required
+            margin="normal"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            name="username"
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+          />
+
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            required
+            margin="normal"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            name="password"
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+
+          <TextField
+            label="Confirm Password"
+            type="password"
+            fullWidth
+            required
+            margin="normal"
+            value={formik.values.cpassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            name="cpassword"
+            error={formik.touched.cpassword && Boolean(formik.errors.cpassword)}
+            helperText={formik.touched.cpassword && formik.errors.cpassword}
+          />
+
+          <Button
+            variant="contained"
+            type="submit"
+            fullWidth
+            sx={{
+              mt: 3,
+              py: 1.4,
+              fontSize: "1rem",
+              borderRadius: "8px",
+            }}
+          >
+            Sign Up
+          </Button>
+
+          <Typography mt={2} textAlign="center" fontSize="0.95rem">
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              Already have an account? <strong>Sign in</strong>
+            </Link>
+          </Typography>
+        </form>
+      </Paper>
+    </Box>
   );
 };
 

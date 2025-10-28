@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import { endpoints } from "../../config/constants";
 import { getAll } from "../../services/api/api";
-import { Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -48,57 +48,60 @@ function Home() {
             <h1>Featured Movies</h1>
 
             <Swiper
-              modules={[Pagination]}
-              spaceBetween={30}
-              slidesPerView={3}
-              pagination={{ clickable: true, dynamicBullets: true }}
+              modules={[Autoplay]}
+              spaceBetween={20}
+              autoplay={{
+                delay: 2000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                0: { slidesPerView: 1 },
+                600: { slidesPerView: 2 },
+                992: { slidesPerView: 3 },
+                1200: { slidesPerView: 4 },
+              }}
               className={styles["swiper-container"]}
             >
               {movies.map((movie) => (
-                <Grid key={movie.id} item xs={12} sm={12} md={6} lg={3} xl={3}>
-                  <SwiperSlide
-                    key={movie.id}
-                    className={styles["slider-content"]}
-                  >
-                    <Card sx={{ maxWidth: 450, backgroundColor: "#F5F5F1" }}>
-                      <CardMedia
-                        sx={{
-                          height: 350,
-                          width: 350,
-                          backgroundPosition: "top",
-                          backgroundPositionX: "top",
-                          objectFit: "contain",
-                        }}
-                        image={movie.coverImg}
-                        title={movie.title}
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {movie.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Genre: {movie.genre}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Year: {movie.year}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Artist: {movie.artist}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button variant="contained" color="error" size="small">
-                          <Link
-                            style={{ color: "white", textDecoration: "none" }}
-                            to={`/movies`}
-                          >
-                            All Movies
-                          </Link>
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </SwiperSlide>
-                </Grid>
+                <SwiperSlide
+                  key={movie.id}
+                  className={styles["slider-content"]}
+                >
+                  <Card sx={{ width: "100%", backgroundColor: "#F5F5F1" }}>
+                    <CardMedia
+                      sx={{
+                        height: 350,
+                        objectFit: "cover",
+                      }}
+                      image={movie.coverImg}
+                      title={movie.title}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {movie.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Genre: {movie.genre}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Year: {movie.year}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Artist: {movie.artist}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
+                      <Button variant="contained" color="error" size="small">
+                        <Link
+                          style={{ color: "white", textDecoration: "none" }}
+                          to={`/movies`}
+                        >
+                          All Movies
+                        </Link>
+                      </Button>
+                    </CardActions>
+                  </Card>
+                </SwiperSlide>
               ))}
             </Swiper>
           </Container>

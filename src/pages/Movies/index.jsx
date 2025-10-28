@@ -76,10 +76,21 @@ const Movies = () => {
         {movies &&
           movies.map((movie) => {
             return (
-              <Grid key={movie.id} item xs={12} sm={12} md={6} lg={3} xl={3}>
-                <Card sx={{ maxWidth: 450, maxHeight: 500 }}>
+              <Grid key={movie.id} item xs={12} sm={6} md={4} lg={3}>
+                <Card
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "10px",
+                    transition: "0.3s",
+                    "&:hover": {
+                      transform: "translateY(-6px)",
+                      boxShadow: "0 8px 20px rgba(0,0,0,0.15)",
+                    },
+                  }}
+                >
                   <CardMedia
-                    sx={{ height: 140 }}
+                    sx={{ height: 260, objectFit: "cover" }}
                     image={movie.coverImg}
                     title={movie.title}
                   />
