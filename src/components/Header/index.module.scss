@@ -3,10 +3,10 @@
   height: 80px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   background-color: #221f1f;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 1000;
 
   nav {
     display: flex;

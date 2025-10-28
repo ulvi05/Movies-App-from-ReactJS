@@ -36,5 +36,21 @@
         color: #fff;
       }
     }
+    .logoutBtn {
+      width: 100%;
+      padding: 10px;
+      background-color: #e50914;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.2s;
+
+      &:active {
+        transform: scale(0.95);
+      }
+    }
   }
 }
